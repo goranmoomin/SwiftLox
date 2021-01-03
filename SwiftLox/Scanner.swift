@@ -135,7 +135,7 @@ class Scanner {
         return source[nextIndex]
     }
 
-    private func addToken(_ kind: Token.Kind, withValue value: Any? = nil) {
+    private func addToken(_ kind: Token.Kind, withValue value: AnyHashable? = nil) {
         let lexeme = source[startIndex..<currentIndex]
         let token = Token(kind: kind, lexeme: lexeme, value: value, line: line)
         tokens.append(token)

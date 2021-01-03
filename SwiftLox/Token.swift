@@ -12,6 +12,6 @@ struct Token {
 
     let kind: Kind
     let lexeme: Substring
-    let value: Any?
+    let value: AnyHashable?
     let line: Int
 }

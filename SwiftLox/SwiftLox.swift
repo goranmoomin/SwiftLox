@@ -3,6 +3,9 @@ import Foundation
 
 class SwiftLox {
     static var hadError: Bool = false
+    static var hadRuntimeError: Bool = false
+
+    private static var interpreter = Interpreter()
 
     static func runFile(atPath path: String) {
         guard
@@ -30,8 +33,7 @@ class SwiftLox {
         let parser = Parser(tokens: tokens)
         if hadError { return }
         if let expression = try? parser.parseExpression() {
-            let printer = ASTPrinter()
-            print(printer.printed(expression))
+            interpreter.interpret(expression)
         }
     }
 
@@ -42,5 +44,10 @@ class SwiftLox {
             print("[line \(line)] Error: \(message)", to: &standardError)
         }
         hadError = true
+    }
+
+    static func report(_ runtimeError: Interpreter.RuntimeError) {
+        print("[line \(runtimeError.token.line)] Error: \(runtimeError.message)", to: &standardError)
+        hadRuntimeError = true
     }
 }
