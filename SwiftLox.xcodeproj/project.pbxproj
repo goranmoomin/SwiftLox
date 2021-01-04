@@ -11,6 +11,8 @@
 		5B6D61F8259F8B63000C599B /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6D61F7259F8B63000C599B /* Parser.swift */; };
 		5B6D61FB25A1876F000C599B /* Interpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6D61FA25A1876F000C599B /* Interpreter.swift */; };
 		5B6D620225A19A76000C599B /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6D620125A19A76000C599B /* String.swift */; };
+		5B6D620925A212BA000C599B /* Statement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6D620825A212BA000C599B /* Statement.swift */; };
+		5B6D621925A2CCA4000C599B /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6D621825A2CCA4000C599B /* Environment.swift */; };
 		5B99E351259CB8F800C97C25 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B99E350259CB8F800C97C25 /* main.swift */; };
 		5B99E35C259CCA9300C97C25 /* SwiftLox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B99E35B259CCA9200C97C25 /* SwiftLox.swift */; };
 		5B99E35F259CCAFE00C97C25 /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B99E35E259CCAFE00C97C25 /* Scanner.swift */; };
@@ -36,6 +38,8 @@
 		5B6D61F7259F8B63000C599B /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		5B6D61FA25A1876F000C599B /* Interpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interpreter.swift; sourceTree = "<group>"; };
 		5B6D620125A19A76000C599B /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		5B6D620825A212BA000C599B /* Statement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statement.swift; sourceTree = "<group>"; };
+		5B6D621825A2CCA4000C599B /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		5B99E34D259CB8F800C97C25 /* SwiftLox */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwiftLox; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B99E350259CB8F800C97C25 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		5B99E35B259CCA9200C97C25 /* SwiftLox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftLox.swift; sourceTree = "<group>"; };
@@ -80,7 +84,9 @@
 				5B99E35E259CCAFE00C97C25 /* Scanner.swift */,
 				5B6D61F7259F8B63000C599B /* Parser.swift */,
 				5B6D61FA25A1876F000C599B /* Interpreter.swift */,
+				5B6D621825A2CCA4000C599B /* Environment.swift */,
 				5B6D61F1259EDE42000C599B /* Expression.swift */,
+				5B6D620825A212BA000C599B /* Statement.swift */,
 				5B99E36C259DDBAA00C97C25 /* Character.swift */,
 				5B6D620125A19A76000C599B /* String.swift */,
 				5B99E361259CCB0C00C97C25 /* Token.swift */,
@@ -147,8 +153,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B99E365259CCE2100C97C25 /* FileHandle+TextOutputStream.swift in Sources */,
+				5B6D621925A2CCA4000C599B /* Environment.swift in Sources */,
 				5B6D620225A19A76000C599B /* String.swift in Sources */,
 				5B99E35C259CCA9300C97C25 /* SwiftLox.swift in Sources */,
+				5B6D620925A212BA000C599B /* Statement.swift in Sources */,
 				5B99E35F259CCAFE00C97C25 /* Scanner.swift in Sources */,
 				5B99E36D259DDBAA00C97C25 /* Character.swift in Sources */,
 				5B6D61FB25A1876F000C599B /* Interpreter.swift in Sources */,

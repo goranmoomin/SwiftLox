@@ -31,10 +31,9 @@ class SwiftLox {
         let scanner = Scanner(source: source)
         let tokens = scanner.scanTokens()
         let parser = Parser(tokens: tokens)
+        let statements = parser.parse()
         if hadError { return }
-        if let expression = try? parser.parseExpression() {
-            interpreter.interpret(expression)
-        }
+        interpreter.interpret(statements)
     }
 
     static func reportError(onLine line: Int, atLocation location: String? = nil, withMessage message: String) {

@@ -2,23 +2,67 @@
 import Foundation
 
 class Interpreter {
+    private var environment = Environment()
+
     struct RuntimeError: Error {
         let token: Token
         let message: String
     }
 
-    func interpret(_ expression: Expression) {
+    func interpret(_ statements: [Statement]) {
         do {
-            let evaluatedExpression = try evaluated(expression)
-            print(description(of: evaluatedExpression))
+            for statement in statements {
+                try execute(statement)
+            }
         } catch {
             let error = error as! RuntimeError
             SwiftLox.report(error)
         }
     }
 
-    private func evaluated(_ expression: Expression) throws -> AnyHashable? {
+    private func execute(_ statement: Statement) throws {
+        switch statement {
+        case .block(let statements):
+            try executeBlock(statements: statements, in: Environment(enclosedBy: environment))
+        case .expression(let expression):
+            try evaluated(expression)
+        case .if(let condition, let thenBranch, let elseBranch):
+            if try evaluated(condition).isTruthy {
+                try execute(thenBranch)
+            } else if let elseBranch = elseBranch {
+                try execute(elseBranch)
+            }
+        case .print(let expression):
+            let value = try evaluated(expression)
+            print(description(of: value))
+        case .var(let name, let initializer):
+            var value: AnyHashable?
+            if let initializer = initializer {
+                value = try evaluated(initializer)
+            }
+            environment.defineVariable(named: name, as: value)
+        case .while(let condition, let body):
+            while try evaluated(condition).isTruthy {
+                try execute(body)
+            }
+        }
+    }
+
+    private func executeBlock(statements: [Statement], in environment: Environment) throws {
+        let previousEnvironment = self.environment
+        self.environment = environment
+        defer { self.environment = previousEnvironment }
+        for statement in statements {
+            try execute(statement)
+        }
+    }
+
+    @discardableResult private func evaluated(_ expression: Expression) throws -> AnyHashable? {
         switch expression {
+        case .assign(let name, let value):
+            let value = try evaluated(value)
+            try environment.assignValue(value, to: name)
+            return value
         case .binary(let left, let `operator`, let right):
             let left = try evaluated(left)
             let right = try evaluated(right)
@@ -56,6 +100,14 @@ class Interpreter {
             return try evaluated(expression)
         case .literal(let value):
             return value
+        case .logical(let left, let `operator`, let right):
+            let left = try evaluated(left)
+            switch `operator`.kind {
+            case .or: if left.isTruthy { return left }
+            case .and: if !left.isTruthy { return left }
+            default: fatalError()
+            }
+            return try evaluated(right)
         case .unary(let `operator`, let right):
             let right = try evaluated(right)
             switch `operator`.kind {
@@ -63,6 +115,8 @@ class Interpreter {
             case .bang: return !right.isTruthy
             default: fatalError()
             }
+        case .variable(let name):
+            return try environment.getValue(of: name)
         }
     }
 
