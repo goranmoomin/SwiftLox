@@ -27,12 +27,31 @@ class Parser {
 
     private func parseDeclaration() -> Statement? {
         do {
+            if match(.fun) { return try parseFunction(ofKind: "function") }
             if match(.var) { return try parseVarDeclaration() }
             return try parseStatement()
         } catch {
             synchronize()
             return nil
         }
+    }
+
+    private func parseFunction(ofKind functionKind: String) throws -> Statement {
+        let name = try consume(.identifier, withMessage: "Expect \(functionKind) name.")
+        try consume(.leftParen, withMessage: "Expect '(' after \(functionKind) name.")
+        var parameters: [Token] = []
+        if !check(.rightParen) {
+            repeat {
+                if parameters.count >= 255 {
+                    reportError(on: peek(), withMessage: "Can't have more than 255 parameters.")
+                }
+                try parameters.append(consume(.identifier, withMessage: "Expect parameter name."))
+            } while match(.comma)
+        }
+        try consume(.rightParen, withMessage: "Expect ')' after parameters.")
+        try consume(.leftBrace, withMessage: "Expect '{' before \(functionKind) body.")
+        let body = try parseBlock()
+        return .function(name: name, parameters: parameters, body: body)
     }
 
     private func parseVarDeclaration() throws -> Statement {
@@ -49,9 +68,20 @@ class Parser {
         if match(.for) { return try parseForStatement() }
         if match(.if) { return try parseIfStatement() }
         if match(.print) { return try parsePrintStatement() }
+        if match(.return) { return try parseReturnStatement() }
         if match(.while) { return try parseWhileStatement() }
         if match(.leftBrace) { return try .block(statements: parseBlock()) }
         return try parseExpressionStatement()
+    }
+
+    private func parseReturnStatement() throws -> Statement {
+        let keyword = previous()
+        var value: Expression?
+        if !check(.semicolon) {
+            value = try parseExpression()
+        }
+        try consume(.semicolon, withMessage: "Expect ';' after return value.")
+        return .return(keyword: keyword, value: value)
     }
 
     private func parseForStatement() throws -> Statement {
@@ -211,7 +241,29 @@ class Parser {
             let right = try parseUnary()
             return .unary(operator: `operator`, right: right)
         }
-        return try parsePrimary()
+        return try parseCall()
+    }
+
+    private func parseCall() throws -> Expression {
+        var expression = try parsePrimary()
+        while match(.leftParen) {
+            expression = try finishParsingCall(callee: expression)
+        }
+        return expression
+    }
+
+    private func finishParsingCall(callee: Expression) throws -> Expression {
+        var arguments: [Expression] = []
+        if !check(.rightParen) {
+            repeat {
+                if arguments.count >= 255 {
+                    reportError(on: peek(), withMessage: "Can't have more than 255 arguments.")
+                }
+                try arguments.append(parseExpression())
+            } while match(.comma)
+        }
+        let paren = try consume(.rightParen, withMessage: "Expect ')' after arguments.")
+        return .call(callee: callee, paren: paren, arguments: arguments)
     }
 
     private func parsePrimary() throws -> Expression {

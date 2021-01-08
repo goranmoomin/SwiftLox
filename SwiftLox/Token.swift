@@ -1,7 +1,7 @@
 
 import Foundation
 
-struct Token {
+struct Token: Hashable {
     enum Kind {
         case leftParen, rightParen, leftBrace, rightBrace, comma, dot, minus, plus, semicolon, slash, star
         case bang, bangEqual, equal, equalEqual, greater, greaterEqual, less, lessEqual

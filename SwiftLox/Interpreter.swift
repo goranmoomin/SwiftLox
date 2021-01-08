@@ -2,11 +2,21 @@
 import Foundation
 
 class Interpreter {
-    private var environment = Environment()
+    var globals = Environment()
+    private var environment: Environment
 
     struct RuntimeError: Error {
         let token: Token
         let message: String
+    }
+
+    struct Return: Error {
+        let value: AnyHashable?
+    }
+
+    init() {
+        environment = globals
+        globals.defineVariable(named: "clock", as: ClockFunction())
     }
 
     func interpret(_ statements: [Statement]) {
@@ -26,6 +36,9 @@ class Interpreter {
             try executeBlock(statements: statements, in: Environment(enclosedBy: environment))
         case .expression(let expression):
             try evaluated(expression)
+        case .function(let name, let parameters, let body):
+            let function = Function(name: name, parameters: parameters, body: body, enclosingEnvironment: environment)
+            environment.defineVariable(named: function.name, as: function)
         case .if(let condition, let thenBranch, let elseBranch):
             if try evaluated(condition).isTruthy {
                 try execute(thenBranch)
@@ -35,6 +48,12 @@ class Interpreter {
         case .print(let expression):
             let value = try evaluated(expression)
             print(description(of: value))
+        case .return(_, value: let unevaluatedValue):
+            var value: AnyHashable?
+            if let unevaluatedValue = unevaluatedValue {
+                value = try evaluated(unevaluatedValue)
+            }
+            throw Return(value: value)
         case .var(let name, let initializer):
             var value: AnyHashable?
             if let initializer = initializer {
@@ -48,7 +67,7 @@ class Interpreter {
         }
     }
 
-    private func executeBlock(statements: [Statement], in environment: Environment) throws {
+    func executeBlock(statements: [Statement], in environment: Environment) throws {
         let previousEnvironment = self.environment
         self.environment = environment
         defer { self.environment = previousEnvironment }
@@ -96,6 +115,18 @@ class Interpreter {
             case .star: return (left as! Double) * (right as! Double)
             default: fatalError()
             }
+        case .call(let callee, let paren, arguments: let unevaluatedArguments):
+            guard let callee = try evaluated(callee) as? Callable else {
+                throw RuntimeError(token: paren, message: "Can only call functions and classes.")
+            }
+            guard callee.arity == unevaluatedArguments.count else {
+                throw RuntimeError(token: paren, message: "Expected \(callee.arity) arguments but got \(unevaluatedArguments.count).")
+            }
+            var arguments: [AnyHashable?] = []
+            for argument in unevaluatedArguments {
+                try arguments.append(evaluated(argument))
+            }
+            return try callee.call(withArguments: arguments, interpreter: self)
         case .grouping(let expression):
             return try evaluated(expression)
         case .literal(let value):

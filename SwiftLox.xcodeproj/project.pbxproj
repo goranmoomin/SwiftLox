@@ -19,6 +19,9 @@
 		5B99E362259CCB0C00C97C25 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B99E361259CCB0C00C97C25 /* Token.swift */; };
 		5B99E365259CCE2100C97C25 /* FileHandle+TextOutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B99E364259CCE2100C97C25 /* FileHandle+TextOutputStream.swift */; };
 		5B99E36D259DDBAA00C97C25 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B99E36C259DDBAA00C97C25 /* Character.swift */; };
+		5BE8736725A8584100E5806D /* Callable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE8736625A8584100E5806D /* Callable.swift */; };
+		5BE8736A25A85CBB00E5806D /* ClockFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE8736925A85CBB00E5806D /* ClockFunction.swift */; };
+		5BF465EA25A8A074000CF747 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF465E925A8A074000CF747 /* Function.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,6 +50,9 @@
 		5B99E361259CCB0C00C97C25 /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		5B99E364259CCE2100C97C25 /* FileHandle+TextOutputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileHandle+TextOutputStream.swift"; sourceTree = "<group>"; };
 		5B99E36C259DDBAA00C97C25 /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
+		5BE8736625A8584100E5806D /* Callable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Callable.swift; sourceTree = "<group>"; };
+		5BE8736925A85CBB00E5806D /* ClockFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockFunction.swift; sourceTree = "<group>"; };
+		5BF465E925A8A074000CF747 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +90,9 @@
 				5B99E35E259CCAFE00C97C25 /* Scanner.swift */,
 				5B6D61F7259F8B63000C599B /* Parser.swift */,
 				5B6D61FA25A1876F000C599B /* Interpreter.swift */,
+				5BE8736625A8584100E5806D /* Callable.swift */,
+				5BE8736925A85CBB00E5806D /* ClockFunction.swift */,
+				5BF465E925A8A074000CF747 /* Function.swift */,
 				5B6D621825A2CCA4000C599B /* Environment.swift */,
 				5B6D61F1259EDE42000C599B /* Expression.swift */,
 				5B6D620825A212BA000C599B /* Statement.swift */,
@@ -161,8 +170,11 @@
 				5B99E36D259DDBAA00C97C25 /* Character.swift in Sources */,
 				5B6D61FB25A1876F000C599B /* Interpreter.swift in Sources */,
 				5B99E351259CB8F800C97C25 /* main.swift in Sources */,
+				5BF465EA25A8A074000CF747 /* Function.swift in Sources */,
 				5B6D61F8259F8B63000C599B /* Parser.swift in Sources */,
 				5B6D61F2259EDE42000C599B /* Expression.swift in Sources */,
+				5BE8736725A8584100E5806D /* Callable.swift in Sources */,
+				5BE8736A25A85CBB00E5806D /* ClockFunction.swift in Sources */,
 				5B99E362259CCB0C00C97C25 /* Token.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
